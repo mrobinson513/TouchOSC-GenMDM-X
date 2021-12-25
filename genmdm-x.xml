@@ -212,7 +212,7 @@
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[operator1]]></value>
+<value><![CDATA[op1]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -229,6 +229,10 @@
 <property type='i'>
 <key><![CDATA[pointerPriority]]></key>
 <value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[script]]></key>
+<value><![CDATA[print(self.name)]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[shape]]></key>
@@ -3893,7 +3897,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[op3]]></value>
+<value><![CDATA[box]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -4806,7 +4810,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[op2-3]]></value>
+<value><![CDATA[amp]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -4889,7 +4893,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[op2]]></value>
+<value><![CDATA[op2amp]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -5138,7 +5142,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[op1]]></value>
+<value><![CDATA[op1amp]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -5344,7 +5348,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[button5]]></value>
+<value><![CDATA[lfo_enable]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -5373,6 +5377,10 @@ end]]></value>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>2</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[channel]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[valuePosition]]></key>
@@ -5537,7 +5545,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[radial3]]></value>
+<value><![CDATA[am_depth]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -5566,6 +5574,10 @@ end]]></value>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>2</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[channel]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -5714,7 +5726,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[label40]]></value>
+<value><![CDATA[LFO Enable]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -5735,6 +5747,10 @@ end]]></value>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>1</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[channel]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[textAlignH]]></key>
@@ -5833,7 +5849,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[label41]]></value>
+<value><![CDATA[Amp Mod Depth]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -5854,6 +5870,10 @@ end]]></value>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>1</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[channel]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[textAlignH]]></key>
@@ -5964,7 +5984,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[radial7]]></value>
+<value><![CDATA[fm_depth]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -5993,6 +6013,10 @@ end]]></value>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>2</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[channel]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -6141,7 +6165,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[label42]]></value>
+<value><![CDATA[Freq Mod Depth]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -6162,6 +6186,10 @@ end]]></value>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>1</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[channel]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[textAlignH]]></key>
@@ -6272,7 +6300,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[radial8]]></value>
+<value><![CDATA[lfo_rate]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -6301,6 +6329,10 @@ end]]></value>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>2</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[channel]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -6449,7 +6481,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[label43]]></value>
+<value><![CDATA[LFO Rate]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -6470,6 +6502,10 @@ end]]></value>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>1</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[channel]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[textAlignH]]></key>
@@ -7334,7 +7370,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[operator2]]></value>
+<value><![CDATA[op3]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -10243,7 +10279,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[operator3]]></value>
+<value><![CDATA[op2]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -13152,7 +13188,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[operator4]]></value>
+<value><![CDATA[op4]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
