@@ -1,7 +1,7 @@
 #import yaml
 import xml.etree.ElementTree as ET
 
-tree = ET.parse("basic.xml")
+tree = ET.parse("genmdm-x.xml")
 root = tree.getroot()
 print(root.tag)
 for node in root.iter('node'):
@@ -9,6 +9,6 @@ for node in root.iter('node'):
     for node_elems in node.iter():
         if "properties" in node_elems.tag:
             for prop_elems in node_elems.iter("property"):
-                print(prop_elems.tag, prop_elems.attrib)
-                for prop_sub in prop_elems.iter():
-                    print(prop_sub.tag, prop_sub.text)
+                if "node" in prop_elems.tag:
+                    for prop_sub in prop_elems.iter():
+                        print(prop_sub.tag, prop_sub.text)

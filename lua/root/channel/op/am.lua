@@ -1,7 +1,7 @@
 SCALE = 127
 
 function onReceiveNotify(key, value)
-    CC_NUM = value['TL'][key]
+    CC_NUM = value['AM'][key]
 end
 
 function onValueChanged(key)
