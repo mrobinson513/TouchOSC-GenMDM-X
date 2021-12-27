@@ -68,6 +68,70 @@
 <key><![CDATA[pointerPriority]]></key>
 <value>0</value>
 </property>
+<property type='s'>
+<key><![CDATA[script]]></key>
+<value><![CDATA[-- get all children
+children = self.children
+
+-- Continuous Controller Values
+GLOBAL_CC = {}
+CHANNEL_CC = {}
+OPERATOR_CC = {}
+
+-- Global settings
+GLOBAL_CC["lfo"] = 74 -- LFO Enable
+GLOBAL_CC["speed"] = 1 -- LFO Speed
+GLOBAL_CC["pitch"] = 85 -- Pitch Transposition
+GLOBAL_CC["octave"] = 84 -- Octave Division
+GLOBAL_CC["region"] = 83 -- PAL/NTSC Tuning, or region setting
+GLOBAL_CC["special"] = 80 -- Enable "special mode" in Voice 3
+for i=1, #children do
+    if children[i].tag == "global" then
+        global = children[i]
+        --global:notify("cc", GLOBAL_CC)
+        print(global.name, global.tag)
+    end
+end
+
+-- Channel settings
+CHANNEL_CC["SAVE"] = 6 -- Preset Instrument Setting Store in RAM
+CHANNEL_CC["LOAD"] = 9 -- Preset Instrument Setting recall from RAM
+CHANNEL_CC["BEND"] = 81 -- Pitch Bend Amount
+CHANNEL_CC["ALGO"] = 14 -- FM Algorithm
+CHANNEL_CC["FBDK"] = 15 -- OP1 feedback 
+CHANNEL_CC["OUT"] = 77 -- Stereo Configuration; None, Left, Right, Both
+CHANNEL_CC["AM_AMT"] = 76 -- Amp Mod Depth
+CHANNEL_CC["FM_AMT"] = 75 -- Freq. Mod Depth
+for i=1, #children do
+    if children[i].tag == "channel" then
+        channel = children[i]
+        --channel:notify("cc", CHANNEL_CC)
+        print(channel.name, channel.tag)
+    end
+end
+
+
+
+-- operators (rate scale is not used)
+OPERATOR_CC["TL"] = {16,17,18,19} -- Total Level (Amplitude)
+OPERATOR_CC["MULT"] = {20,21,22,23} -- Multiple (Tone Multiplier)
+OPERATOR_CC["DT"] = {24,25,26,27} -- Detune
+OPERATOR_CC["RS"] = {39,40,41,42} -- Rate Scale (not used)
+OPERATOR_CC["AR"] = {43,44,45,46} -- Attack Rate
+OPERATOR_CC["1DR"] = {47,48,49,50} -- 1st Decay Rate
+OPERATOR_CC["SUS"] = {55,56,57,58} -- sustain, AKA "secondary amp level"
+OPERATOR_CC["2DR"] = {51,52,53,54} -- 2nd Decay Rate
+OPERATOR_CC["RR"] = {59,60,61,62} -- Release Rate
+OPERATOR_CC["AM"] = {70,71,72,73} -- Amp Mod Enable
+OPERATOR_CC["SSG"] = {90,91,92,93} -- SSG-EG envelope pattern
+for i=1, #children do
+    if children[i].tag == "operator" then
+        operator = children[i]
+        -- operator:notify("cc", OPERATOR_CC)
+        print(operator.name, operator.tag)
+    end
+end]]></value>
+</property>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>1</value>
@@ -87,89 +151,6 @@
 </value>
 </values>
 <children>
-<node ID='d65d656e-5c76-11ec-aefd-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>405</x>
-<y>472</y>
-<w>10</w>
-<h>59</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[box8]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
 <node ID='4b397b4a-641d-11ec-bbb4-020000000000' type='GROUP'>
 <properties>
 <property type='b'>
@@ -212,7 +193,7 @@
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[op1]]></value>
+<value><![CDATA[1]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -232,11 +213,40 @@
 </property>
 <property type='s'>
 <key><![CDATA[script]]></key>
-<value><![CDATA[print(self.name)]]></value>
+<value><![CDATA[OP_NUM = tonumber(self.name)
+CONTROLS = self.children
+OPERATOR_CC = {}
+-- operators (rate scale is not used)
+OPERATOR_CC["TL"] = {16,17,18,19} -- Total Level (Amplitude)
+OPERATOR_CC["MULT"] = {20,21,22,23} -- Multiple (Tone Multiplier)
+OPERATOR_CC["DT"] = {24,25,26,27} -- Detune
+OPERATOR_CC["RS"] = {39,40,41,42} -- Rate Scale (not used)
+OPERATOR_CC["AR"] = {43,44,45,46} -- Attack Rate
+OPERATOR_CC["1DR"] = {47,48,49,50} -- 1st Decay Rate
+OPERATOR_CC["SUS"] = {55,56,57,58} -- sustain, AKA "secondary amp level"
+OPERATOR_CC["2DR"] = {51,52,53,54} -- 2nd Decay Rate
+OPERATOR_CC["RR"] = {59,60,61,62} -- Release Rate
+OPERATOR_CC["AM"] = {70,71,72,73} -- Amp Mod Enable
+OPERATOR_CC["SSG"] = {90,91,92,93} -- SSG-EG envelope pattern
+for i=1, #CONTROLS do
+    if CONTROLS[i].type ~= ControlType.LABEL then
+        ctrl = CONTROLS[i]
+        -- operator:notify("cc", OPERATOR_CC[name])
+        print(
+            "Operator:", OP_NUM,
+            "Control:", ctrl.name,
+            "CC:", OPERATOR_CC[ctrl.name][OP_NUM]
+        )
+    end
+end]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>1</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[operator]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -345,9 +355,22 @@
 <key><![CDATA[responseFactor]]></key>
 <value>100</value>
 </property>
+<property type='s'>
+<key><![CDATA[script]]></key>
+<value><![CDATA[name = self.name
+
+function onReceiveNotify(key, value)
+    print("Got it")
+    print(#value)
+end]]></value>
+</property>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>1</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[17]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -370,85 +393,6 @@
 <defaultPull>0</defaultPull>
 </value>
 </values>
-<messages>
-<midi>
-<enabled>1</enabled>
-<send>1</send>
-<receive>1</receive>
-<feedback>0</feedback>
-<connections>00001</connections>
-<triggers>
-<trigger>
-<var><![CDATA[x]]></var>
-<condition>ANY</condition>
-</trigger>
-</triggers>
-<message>
-<type>CONTROLCHANGE</type>
-<channel>0</channel>
-<data1>0</data1>
-<data2>0</data2>
-</message>
-<values>
-<value>
-<type>CONSTANT</type>
-<key><![CDATA[]]></key>
-<scaleMin>0</scaleMin>
-<scaleMax>15</scaleMax>
-</value>
-<value>
-<type>INDEX</type>
-<key><![CDATA[]]></key>
-<scaleMin>0</scaleMin>
-<scaleMax>1</scaleMax>
-</value>
-<value>
-<type>VALUE</type>
-<key><![CDATA[x]]></key>
-<scaleMin>0</scaleMin>
-<scaleMax>127</scaleMax>
-</value>
-</values>
-</midi>
-<osc>
-<enabled>1</enabled>
-<send>1</send>
-<receive>1</receive>
-<feedback>0</feedback>
-<connections>00001</connections>
-<triggers>
-<trigger>
-<var><![CDATA[x]]></var>
-<condition>ANY</condition>
-</trigger>
-</triggers>
-<path>
-<partial>
-<type>CONSTANT</type>
-<conversion>STRING</conversion>
-<value><![CDATA[/]]></value>
-<scaleMin>0</scaleMin>
-<scaleMax>1</scaleMax>
-</partial>
-<partial>
-<type>PROPERTY</type>
-<conversion>STRING</conversion>
-<value><![CDATA[name]]></value>
-<scaleMin>0</scaleMin>
-<scaleMax>1</scaleMax>
-</partial>
-</path>
-<arguments>
-<partial>
-<type>VALUE</type>
-<conversion>FLOAT</conversion>
-<value><![CDATA[x]]></value>
-<scaleMin>0</scaleMin>
-<scaleMax>1</scaleMax>
-</partial>
-</arguments>
-</osc>
-</messages>
 </node>
 <node ID='4a700cea-5c6d-11ec-9862-020000000000' type='FADER'>
 <properties>
@@ -516,7 +460,7 @@
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[MULT1]]></value>
+<value><![CDATA[MULT]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -545,6 +489,10 @@
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>1</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[cc]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -713,7 +661,7 @@
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[DT1]]></value>
+<value><![CDATA[DT]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -910,7 +858,7 @@
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[AR1]]></value>
+<value><![CDATA[AR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -1107,7 +1055,7 @@
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[1DR1]]></value>
+<value><![CDATA[1DR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -1304,7 +1252,7 @@
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[SUS1]]></value>
+<value><![CDATA[SUS]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -1501,7 +1449,7 @@
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[2DR1]]></value>
+<value><![CDATA[2DR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -1698,7 +1646,7 @@
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[RR1]]></value>
+<value><![CDATA[RR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -2827,7 +2775,7 @@
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[button1]]></value>
+<value><![CDATA[AM]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -3081,314 +3029,6 @@
 </value>
 </values>
 </node>
-<node ID='11eb2a4a-5c71-11ec-bd51-020000000000' type='RADIAL'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[centered]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.168627</r>
-<g>0.588235</g>
-<b>1</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>323</x>
-<y>65</y>
-<w>50</w>
-<h>50</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[grid]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[gridSteps]]></key>
-<value>20</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[inverted]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[radial2]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[response]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[responseFactor]]></key>
-<value>100</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>2</value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-<value>
-<key><![CDATA[x]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[0]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-<messages>
-<midi>
-<enabled>1</enabled>
-<send>1</send>
-<receive>1</receive>
-<feedback>0</feedback>
-<connections>00001</connections>
-<triggers>
-<trigger>
-<var><![CDATA[x]]></var>
-<condition>ANY</condition>
-</trigger>
-</triggers>
-<message>
-<type>CONTROLCHANGE</type>
-<channel>0</channel>
-<data1>0</data1>
-<data2>0</data2>
-</message>
-<values>
-<value>
-<type>CONSTANT</type>
-<key><![CDATA[]]></key>
-<scaleMin>0</scaleMin>
-<scaleMax>15</scaleMax>
-</value>
-<value>
-<type>INDEX</type>
-<key><![CDATA[]]></key>
-<scaleMin>0</scaleMin>
-<scaleMax>1</scaleMax>
-</value>
-<value>
-<type>VALUE</type>
-<key><![CDATA[x]]></key>
-<scaleMin>0</scaleMin>
-<scaleMax>127</scaleMax>
-</value>
-</values>
-</midi>
-<osc>
-<enabled>1</enabled>
-<send>1</send>
-<receive>1</receive>
-<feedback>0</feedback>
-<connections>00001</connections>
-<triggers>
-<trigger>
-<var><![CDATA[x]]></var>
-<condition>ANY</condition>
-</trigger>
-</triggers>
-<path>
-<partial>
-<type>CONSTANT</type>
-<conversion>STRING</conversion>
-<value><![CDATA[/]]></value>
-<scaleMin>0</scaleMin>
-<scaleMax>1</scaleMax>
-</partial>
-<partial>
-<type>PROPERTY</type>
-<conversion>STRING</conversion>
-<value><![CDATA[name]]></value>
-<scaleMin>0</scaleMin>
-<scaleMax>1</scaleMax>
-</partial>
-</path>
-<arguments>
-<partial>
-<type>VALUE</type>
-<conversion>FLOAT</conversion>
-<value><![CDATA[x]]></value>
-<scaleMin>0</scaleMin>
-<scaleMax>1</scaleMax>
-</partial>
-</arguments>
-</osc>
-</messages>
-</node>
-<node ID='594402ae-5c71-11ec-8fd9-020000000000' type='LABEL'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>1</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.168627</r>
-<g>0.588235</g>
-<b>1</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[font]]></key>
-<value>0</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>323</x>
-<y>120</y>
-<w>50</w>
-<h>15</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[Op1 Feedback]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[textAlignH]]></key>
-<value>2</value>
-</property>
-<property type='i'>
-<key><![CDATA[textAlignV]]></key>
-<value>2</value>
-</property>
-<property type='b'>
-<key><![CDATA[textClip]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[textColor]]></key>
-<value>
-<r>1</r>
-<g>1</g>
-<b>1</b>
-<a>1</a>
-</value>
-</property>
-<property type='i'>
-<key><![CDATA[textLength]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[textSize]]></key>
-<value>8</value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[text]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>1</lockedDefaultCurrent>
-<default><![CDATA[OP1 FDBK]]></default>
-<defaultPull>0</defaultPull>
-</value>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
 </children>
 </node>
 <node ID='f262f64c-5c72-11ec-8ea3-020000000000' type='RADIO'>
@@ -3413,8 +3053,8 @@
 <property type='r'>
 <key><![CDATA[frame]]></key>
 <value>
-<x>12</x>
-<y>420</y>
+<x>16</x>
+<y>400</y>
 <w>308</w>
 <h>50</h>
 </value>
@@ -3433,7 +3073,7 @@
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[fm_algo]]></value>
+<value><![CDATA[ALGO]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -3457,37 +3097,8 @@
 </property>
 <property type='s'>
 <key><![CDATA[script]]></key>
-<value><![CDATA[-- Control type: Radio with 8 steps
-
-CC_NUM = 14 -- FM Algorithm
-SCALE = 128 / self.properties.steps
-
-function onValueChanged(key)
-  if key == 'x' then
-    CHANNEL_PAGE = self.parent.parent
-    PAGE = tonumber(CHANNEL_PAGE.values.page)
-    CC_VAL = math.ceil(self.values[key] * SCALE)
-
-    print(
-    'MIDI Channel: ', PAGE,
-    'Continuous Controller: ', CC_NUM,
-    'CC Value: ', CC_VAL)
-    sendMIDI({ MIDIMessageType.CONTROLCHANGE + PAGE, CC_NUM, CC_VAL })
-  end
-end
-
-function onReceiveNotify(key, value)
-  PAGE = tonumber(value['channel'])
-  CC_VAL = math.ceil(value['x'] * 127)
-
-  print("Updating Control: ", PAGE, CC_NUM, CC_VAL)
-  print(
-    "Channel: ", PAGE + 1,
-    "CC Number: ", CC_NUM,
-    "CC Value: ", CC_VAL
-    )
-  sendMIDI({ MIDIMessageType.CONTROLCHANGE + PAGE, CC_NUM, CC_VAL })
-end]]></value>
+<value><![CDATA[algomap = self.parent:findByName("ALGOMAP")
+print(algomap.name)]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[shape]]></key>
@@ -3519,1666 +3130,6 @@ end]]></value>
 <locked>0</locked>
 <lockedDefaultCurrent>0</lockedDefaultCurrent>
 <default><![CDATA[0]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='999f7362-5c74-11ec-89c2-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>1</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.168627</r>
-<g>0.588235</g>
-<b>1</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>329</x>
-<y>443</y>
-<w>50</w>
-<h>50</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op1]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='b6881952-5c74-11ec-95d3-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>1</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.447059</r>
-<g>0.333333</g>
-<b>1</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>439</x>
-<y>443</y>
-<w>50</w>
-<h>50</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op2]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='043cdb4c-5c75-11ec-875b-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>1</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0</r>
-<g>0.607843</g>
-<b>0.0235294</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>330</x>
-<y>552</y>
-<w>50</w>
-<h>50</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op3]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='23bd47fe-5c75-11ec-ad65-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>1</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>1</r>
-<g>0.368627</g>
-<b>0.137255</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>440</x>
-<y>552</y>
-<w>50</w>
-<h>50</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op4]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='78fe0dc2-5c78-11ec-a913-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>350</x>
-<y>522</y>
-<w>10</w>
-<h>30</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[box]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='a024b9a0-5c78-11ec-a008-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>350</x>
-<y>522</y>
-<w>60</w>
-<h>10</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[box12]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='ee69cd44-5c78-11ec-8bec-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>460</x>
-<y>522</y>
-<w>10</w>
-<h>30</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[box13]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='fee77f18-5c78-11ec-8bbd-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>350</x>
-<y>493</y>
-<w>10</w>
-<h>28</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[box14]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='06a9b2d4-5c79-11ec-b3c0-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>410</x>
-<y>522</y>
-<w>60</w>
-<h>10</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[box15]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='1035b0dc-5c79-11ec-b57b-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>460</x>
-<y>492</y>
-<w>10</w>
-<h>30</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op2]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='23d99158-5c79-11ec-b7ad-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>405</x>
-<y>523</y>
-<w>10</w>
-<h>59</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[box17]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='3738c4bc-5c79-11ec-bcfa-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>410</x>
-<y>462</y>
-<w>29</w>
-<h>10</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op2]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='79cd2a0c-5c79-11ec-a42e-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>379</x>
-<y>462</y>
-<w>31</w>
-<h>10</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[box19]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='aa4cf90a-5c79-11ec-807f-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>410</x>
-<y>582</y>
-<w>30</w>
-<h>10</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op4]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='aa4cfbee-5c79-11ec-8a89-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.590909</r>
-<g>0</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>380</x>
-<y>582</y>
-<w>30</w>
-<h>10</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[box21]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='d834313e-5c7a-11ec-8d23-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.063218</r>
-<g>0.765152</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>470</x>
-<y>522</y>
-<w>60</w>
-<h>10</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[amp]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='f6320f76-5c7a-11ec-8fa9-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.063218</r>
-<g>0.765152</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>489</x>
-<y>462</y>
-<w>38</w>
-<h>10</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op2amp]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='23b1d062-5c7b-11ec-87af-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.063218</r>
-<g>0.765152</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>490</x>
-<y>572</y>
-<w>38</w>
-<h>10</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op4]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='9c83f5f6-5c7b-11ec-9537-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.063218</r>
-<g>0.765152</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>350</x>
-<y>602</y>
-<w>10</w>
-<h>30</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op3]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='a059a70c-5c7b-11ec-b5e2-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.063218</r>
-<g>0.765152</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>350</x>
-<y>413</y>
-<w>10</w>
-<h>30</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op1amp]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
 <defaultPull>0</defaultPull>
 </value>
 </values>
@@ -5348,7 +3299,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[lfo_enable]]></value>
+<value><![CDATA[lfo]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -5380,7 +3331,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[tag]]></key>
-<value><![CDATA[channel]]></value>
+<value><![CDATA[global]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[valuePosition]]></key>
@@ -5545,7 +3496,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[am_depth]]></value>
+<value><![CDATA[AM_AMT]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -5577,7 +3528,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[tag]]></key>
-<value><![CDATA[channel]]></value>
+<value><![CDATA[global]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -5748,10 +3699,6 @@ end]]></value>
 <key><![CDATA[shape]]></key>
 <value>1</value>
 </property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[channel]]></value>
-</property>
 <property type='i'>
 <key><![CDATA[textAlignH]]></key>
 <value>2</value>
@@ -5871,10 +3818,6 @@ end]]></value>
 <key><![CDATA[shape]]></key>
 <value>1</value>
 </property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[channel]]></value>
-</property>
 <property type='i'>
 <key><![CDATA[textAlignH]]></key>
 <value>2</value>
@@ -5984,7 +3927,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[fm_depth]]></value>
+<value><![CDATA[FM_AMT]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -6016,7 +3959,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[tag]]></key>
-<value><![CDATA[channel]]></value>
+<value><![CDATA[global]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -6187,10 +4130,6 @@ end]]></value>
 <key><![CDATA[shape]]></key>
 <value>1</value>
 </property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[channel]]></value>
-</property>
 <property type='i'>
 <key><![CDATA[textAlignH]]></key>
 <value>2</value>
@@ -6300,7 +4239,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[lfo_rate]]></value>
+<value><![CDATA[speed]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -6332,7 +4271,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[tag]]></key>
-<value><![CDATA[channel]]></value>
+<value><![CDATA[global]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -6503,10 +4442,6 @@ end]]></value>
 <key><![CDATA[shape]]></key>
 <value>1</value>
 </property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[channel]]></value>
-</property>
 <property type='i'>
 <key><![CDATA[textAlignH]]></key>
 <value>2</value>
@@ -6558,244 +4493,6 @@ end]]></value>
 </value>
 </values>
 </node>
-<node ID='b2c4b954-5c80-11ec-913f-020000000000' type='RADIO'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>1</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.284715</r>
-<g>0.358386</g>
-<b>1</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>89</x>
-<y>520</y>
-<w>155</w>
-<h>50</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[radio2]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[radioType]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[script]]></key>
-<value><![CDATA[-- Control type: Radio with 4 steps
--- Channel controls do not increment CC numbers, only the channel
-CC_NUM = 77 -- Pitch Bend Amount
-SCALE = 128 / self.properties.steps
-
-function onValueChanged(key)
-  if key == 'x' then
-    CHANNEL_PAGE = self.parent.parent
-    PAGE = tonumber(CHANNEL_PAGE.values.page)
-    CC_VAL = self.values[key] * SCALE
-
-    print(
-    'MIDI Channel: ', PAGE,
-    'Continuous Controller: ', CC_NUM,
-    'CC Value: ', CC_VAL)
-    sendMIDI({ MIDIMessageType.CONTROLCHANGE + PAGE, CC_NUM, CC_VAL })
-  end
-end]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[steps]]></key>
-<value>4</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[channel]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-<value>
-<key><![CDATA[x]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[0]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
-<node ID='b2c4fe00-5c80-11ec-86bb-020000000000' type='LABEL'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>1</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.282353</r>
-<g>0.356863</g>
-<b>1</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[font]]></key>
-<value>0</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>121</x>
-<y>575</y>
-<w>90</w>
-<h>21</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[label45]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[textAlignH]]></key>
-<value>2</value>
-</property>
-<property type='i'>
-<key><![CDATA[textAlignV]]></key>
-<value>2</value>
-</property>
-<property type='b'>
-<key><![CDATA[textClip]]></key>
-<value>1</value>
-</property>
-<property type='c'>
-<key><![CDATA[textColor]]></key>
-<value>
-<r>1</r>
-<g>1</g>
-<b>1</b>
-<a>1</a>
-</value>
-</property>
-<property type='i'>
-<key><![CDATA[textLength]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[textSize]]></key>
-<value>11</value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[text]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>1</lockedDefaultCurrent>
-<default><![CDATA[Output Channel]]></default>
-<defaultPull>0</defaultPull>
-</value>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
 <node ID='b2c4ffa4-5c80-11ec-91e0-020000000000' type='RADIO'>
 <properties>
 <property type='b'>
@@ -6818,8 +4515,8 @@ end]]></value>
 <property type='r'>
 <key><![CDATA[frame]]></key>
 <value>
-<x>89</x>
-<y>520</y>
+<x>620</x>
+<y>433</y>
 <w>155</w>
 <h>50</h>
 </value>
@@ -6838,7 +4535,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[output]]></value>
+<value><![CDATA[OUT]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -6954,8 +4651,8 @@ end]]></value>
 <property type='r'>
 <key><![CDATA[frame]]></key>
 <value>
-<x>121</x>
-<y>575</y>
+<x>652</x>
+<y>488</y>
 <w>90</w>
 <h>21</h>
 </value>
@@ -7152,8 +4849,8 @@ end]]></value>
 <property type='r'>
 <key><![CDATA[frame]]></key>
 <value>
-<x>91</x>
-<y>480</y>
+<x>95</x>
+<y>460</y>
 <w>150</w>
 <h>25</h>
 </value>
@@ -7245,89 +4942,6 @@ end]]></value>
 </value>
 </values>
 </node>
-<node ID='9d5829a8-5c84-11ec-b664-020000000000' type='BOX'>
-<properties>
-<property type='b'>
-<key><![CDATA[background]]></key>
-<value>0</value>
-</property>
-<property type='c'>
-<key><![CDATA[color]]></key>
-<value>
-<r>0.063218</r>
-<g>0.765152</g>
-<b>0</b>
-<a>1</a>
-</value>
-</property>
-<property type='f'>
-<key><![CDATA[cornerRadius]]></key>
-<value>1</value>
-</property>
-<property type='r'>
-<key><![CDATA[frame]]></key>
-<value>
-<x>290</x>
-<y>522</y>
-<w>60</w>
-<h>10</h>
-</value>
-</property>
-<property type='b'>
-<key><![CDATA[grabFocus]]></key>
-<value>1</value>
-</property>
-<property type='b'>
-<key><![CDATA[interactive]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[locked]]></key>
-<value>0</value>
-</property>
-<property type='s'>
-<key><![CDATA[name]]></key>
-<value><![CDATA[op1-3]]></value>
-</property>
-<property type='i'>
-<key><![CDATA[orientation]]></key>
-<value>0</value>
-</property>
-<property type='b'>
-<key><![CDATA[outline]]></key>
-<value>1</value>
-</property>
-<property type='i'>
-<key><![CDATA[outlineStyle]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[pointerPriority]]></key>
-<value>0</value>
-</property>
-<property type='i'>
-<key><![CDATA[shape]]></key>
-<value>1</value>
-</property>
-<property type='s'>
-<key><![CDATA[tag]]></key>
-<value><![CDATA[algorithm]]></value>
-</property>
-<property type='b'>
-<key><![CDATA[visible]]></key>
-<value>1</value>
-</property>
-</properties>
-<values>
-<value>
-<key><![CDATA[touch]]></key>
-<locked>0</locked>
-<lockedDefaultCurrent>0</lockedDefaultCurrent>
-<default><![CDATA[false]]></default>
-<defaultPull>0</defaultPull>
-</value>
-</values>
-</node>
 <node ID='4b61f73a-641f-11ec-b9ab-020000000000' type='GROUP'>
 <properties>
 <property type='b'>
@@ -7370,7 +4984,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[op3]]></value>
+<value><![CDATA[3]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -7388,9 +5002,42 @@ end]]></value>
 <key><![CDATA[pointerPriority]]></key>
 <value>0</value>
 </property>
+<property type='s'>
+<key><![CDATA[script]]></key>
+<value><![CDATA[OP_NUM = tonumber(self.name)
+CONTROLS = self.children
+OPERATOR_CC = {}
+-- operators (rate scale is not used)
+OPERATOR_CC["TL"] = {16,17,18,19} -- Total Level (Amplitude)
+OPERATOR_CC["MULT"] = {20,21,22,23} -- Multiple (Tone Multiplier)
+OPERATOR_CC["DT"] = {24,25,26,27} -- Detune
+OPERATOR_CC["RS"] = {39,40,41,42} -- Rate Scale (not used)
+OPERATOR_CC["AR"] = {43,44,45,46} -- Attack Rate
+OPERATOR_CC["1DR"] = {47,48,49,50} -- 1st Decay Rate
+OPERATOR_CC["SUS"] = {55,56,57,58} -- sustain, AKA "secondary amp level"
+OPERATOR_CC["2DR"] = {51,52,53,54} -- 2nd Decay Rate
+OPERATOR_CC["RR"] = {59,60,61,62} -- Release Rate
+OPERATOR_CC["AM"] = {70,71,72,73} -- Amp Mod Enable
+OPERATOR_CC["SSG"] = {90,91,92,93} -- SSG-EG envelope pattern
+for i=1, #CONTROLS do
+    if CONTROLS[i].type ~= ControlType.LABEL then
+        ctrl = CONTROLS[i]
+        -- operator:notify("cc", OPERATOR_CC[name])
+        print(
+            "Operator:", OP_NUM,
+            "Control:", ctrl.name,
+            "CC:", OPERATOR_CC[ctrl.name]
+        )
+    end
+end]]></value>
+</property>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>1</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[operator]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -7473,7 +5120,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[TL1]]></value>
+<value><![CDATA[TL]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -7670,7 +5317,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[MULT1]]></value>
+<value><![CDATA[MULT]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -7867,7 +5514,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[DT1]]></value>
+<value><![CDATA[DT]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -8064,7 +5711,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[AR1]]></value>
+<value><![CDATA[AR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -8261,7 +5908,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[1DR1]]></value>
+<value><![CDATA[1DR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -8458,7 +6105,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[SUS1]]></value>
+<value><![CDATA[SUS]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -8655,7 +6302,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[2DR1]]></value>
+<value><![CDATA[2DR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -8852,7 +6499,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[RR1]]></value>
+<value><![CDATA[RR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -9981,7 +7628,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[button1]]></value>
+<value><![CDATA[AM]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -10279,7 +7926,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[op2]]></value>
+<value><![CDATA[2]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -10297,9 +7944,19 @@ end]]></value>
 <key><![CDATA[pointerPriority]]></key>
 <value>0</value>
 </property>
+<property type='s'>
+<key><![CDATA[script]]></key>
+<value><![CDATA[CC = {}
+CC["tl"] = {16,17,18,19}
+print(CC["tl"])]]></value>
+</property>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>1</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[operator]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -10382,7 +8039,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[TL1]]></value>
+<value><![CDATA[TL]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -10579,7 +8236,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[MULT1]]></value>
+<value><![CDATA[MULT]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -10776,7 +8433,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[DT1]]></value>
+<value><![CDATA[DT]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -10973,7 +8630,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[AR1]]></value>
+<value><![CDATA[AR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -11170,7 +8827,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[1DR1]]></value>
+<value><![CDATA[1DR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -11367,7 +9024,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[SUS1]]></value>
+<value><![CDATA[SUS]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -11564,7 +9221,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[2DR1]]></value>
+<value><![CDATA[2DR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -11761,7 +9418,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[RR1]]></value>
+<value><![CDATA[RR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -12890,7 +10547,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[button1]]></value>
+<value><![CDATA[AM]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -13188,7 +10845,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[op4]]></value>
+<value><![CDATA[4]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -13209,6 +10866,10 @@ end]]></value>
 <property type='i'>
 <key><![CDATA[shape]]></key>
 <value>1</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[operator]]></value>
 </property>
 <property type='b'>
 <key><![CDATA[visible]]></key>
@@ -13291,7 +10952,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[TL1]]></value>
+<value><![CDATA[TL]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -13488,7 +11149,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[MULT1]]></value>
+<value><![CDATA[MULT]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -13685,7 +11346,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[DT1]]></value>
+<value><![CDATA[DT]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -13882,7 +11543,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[AR1]]></value>
+<value><![CDATA[AR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -14079,7 +11740,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[1DR1]]></value>
+<value><![CDATA[1DR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -14276,7 +11937,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[SUS1]]></value>
+<value><![CDATA[SUS]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -14473,7 +12134,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[2DR1]]></value>
+<value><![CDATA[2DR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -14670,7 +12331,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[RR1]]></value>
+<value><![CDATA[RR]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -15799,7 +13460,7 @@ end]]></value>
 </property>
 <property type='s'>
 <key><![CDATA[name]]></key>
-<value><![CDATA[button1]]></value>
+<value><![CDATA[AM]]></value>
 </property>
 <property type='i'>
 <key><![CDATA[orientation]]></key>
@@ -16042,6 +13703,1827 @@ end]]></value>
 <locked>0</locked>
 <lockedDefaultCurrent>1</lockedDefaultCurrent>
 <default><![CDATA[AM Enable]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+</children>
+</node>
+<node ID='a9fd6de0-65c0-11ec-bfa2-acbc32ca99c7' type='RADIAL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[centered]]></key>
+<value>0</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>0.168627</r>
+<g>0.588235</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>353</x>
+<y>115</y>
+<w>50</w>
+<h>50</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[grid]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[gridSteps]]></key>
+<value>20</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[inverted]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[FDBK]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[response]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[responseFactor]]></key>
+<value>100</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>2</value>
+</property>
+<property type='s'>
+<key><![CDATA[tag]]></key>
+<value><![CDATA[channel]]></value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[x]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[0]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+<messages>
+<midi>
+<enabled>1</enabled>
+<send>1</send>
+<receive>1</receive>
+<feedback>0</feedback>
+<connections>00001</connections>
+<triggers>
+<trigger>
+<var><![CDATA[x]]></var>
+<condition>ANY</condition>
+</trigger>
+</triggers>
+<message>
+<type>CONTROLCHANGE</type>
+<channel>0</channel>
+<data1>0</data1>
+<data2>0</data2>
+</message>
+<values>
+<value>
+<type>CONSTANT</type>
+<key><![CDATA[]]></key>
+<scaleMin>0</scaleMin>
+<scaleMax>15</scaleMax>
+</value>
+<value>
+<type>INDEX</type>
+<key><![CDATA[]]></key>
+<scaleMin>0</scaleMin>
+<scaleMax>1</scaleMax>
+</value>
+<value>
+<type>VALUE</type>
+<key><![CDATA[x]]></key>
+<scaleMin>0</scaleMin>
+<scaleMax>127</scaleMax>
+</value>
+</values>
+</midi>
+<osc>
+<enabled>1</enabled>
+<send>1</send>
+<receive>1</receive>
+<feedback>0</feedback>
+<connections>00001</connections>
+<triggers>
+<trigger>
+<var><![CDATA[x]]></var>
+<condition>ANY</condition>
+</trigger>
+</triggers>
+<path>
+<partial>
+<type>CONSTANT</type>
+<conversion>STRING</conversion>
+<value><![CDATA[/]]></value>
+<scaleMin>0</scaleMin>
+<scaleMax>1</scaleMax>
+</partial>
+<partial>
+<type>PROPERTY</type>
+<conversion>STRING</conversion>
+<value><![CDATA[name]]></value>
+<scaleMin>0</scaleMin>
+<scaleMax>1</scaleMax>
+</partial>
+</path>
+<arguments>
+<partial>
+<type>VALUE</type>
+<conversion>FLOAT</conversion>
+<value><![CDATA[x]]></value>
+<scaleMin>0</scaleMin>
+<scaleMax>1</scaleMax>
+</partial>
+</arguments>
+</osc>
+</messages>
+</node>
+<node ID='a9fd70e2-65c0-11ec-ab5a-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>0.168627</r>
+<g>0.588235</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>353</x>
+<y>170</y>
+<w>50</w>
+<h>15</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[OP1 FDBK]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>0</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>8</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[OP1 FDBK]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='2643446e-6662-11ec-a98a-acbc32ca99c7' type='GROUP'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>0</r>
+<g>0</g>
+<b>0</b>
+<a>0</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>256</x>
+<y>461</y>
+<w>173</w>
+<h>127</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[ALGOMAP]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+<children>
+<node ID='ada4d2de-65c1-11ec-b9e8-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>5</x>
+<y>5</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[B1]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='ada4d806-65c1-11ec-8693-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>51</x>
+<y>5</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[B2]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='c48e8026-65c1-11ec-af8a-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>5</x>
+<y>51</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[C1]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='c48e813e-65c1-11ec-9d2a-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>51</x>
+<y>51</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[C2]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='1ca3429c-65c2-11ec-9933-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>97</x>
+<y>5</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[B3]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='1ca34332-65c2-11ec-955f-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>143</x>
+<y>5</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[B4]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='1ca343d2-65c2-11ec-aa11-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>97</x>
+<y>51</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[C3]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='1ca34454-65c2-11ec-a5b6-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>143</x>
+<y>51</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[C4]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='bafa86b0-65c4-11ec-b028-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>5</x>
+<y>97</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[D1]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='bafa87d2-65c4-11ec-91a0-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>51</x>
+<y>97</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[D2]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='bafa88a4-65c4-11ec-8293-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>97</x>
+<y>97</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[D3]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
+<defaultPull>0</defaultPull>
+</value>
+<value>
+<key><![CDATA[touch]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>0</lockedDefaultCurrent>
+<default><![CDATA[false]]></default>
+<defaultPull>0</defaultPull>
+</value>
+</values>
+</node>
+<node ID='bafa8a0c-65c4-11ec-a168-acbc32ca99c7' type='LABEL'>
+<properties>
+<property type='b'>
+<key><![CDATA[background]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[color]]></key>
+<value>
+<r>1</r>
+<g>0</g>
+<b>0</b>
+<a>1</a>
+</value>
+</property>
+<property type='f'>
+<key><![CDATA[cornerRadius]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[font]]></key>
+<value>0</value>
+</property>
+<property type='r'>
+<key><![CDATA[frame]]></key>
+<value>
+<x>143</x>
+<y>97</y>
+<w>25</w>
+<h>25</h>
+</value>
+</property>
+<property type='b'>
+<key><![CDATA[grabFocus]]></key>
+<value>1</value>
+</property>
+<property type='b'>
+<key><![CDATA[interactive]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[locked]]></key>
+<value>0</value>
+</property>
+<property type='s'>
+<key><![CDATA[name]]></key>
+<value><![CDATA[D4]]></value>
+</property>
+<property type='i'>
+<key><![CDATA[orientation]]></key>
+<value>0</value>
+</property>
+<property type='b'>
+<key><![CDATA[outline]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[outlineStyle]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[pointerPriority]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[shape]]></key>
+<value>1</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignH]]></key>
+<value>2</value>
+</property>
+<property type='i'>
+<key><![CDATA[textAlignV]]></key>
+<value>2</value>
+</property>
+<property type='b'>
+<key><![CDATA[textClip]]></key>
+<value>1</value>
+</property>
+<property type='c'>
+<key><![CDATA[textColor]]></key>
+<value>
+<r>1</r>
+<g>1</g>
+<b>1</b>
+<a>1</a>
+</value>
+</property>
+<property type='i'>
+<key><![CDATA[textLength]]></key>
+<value>0</value>
+</property>
+<property type='i'>
+<key><![CDATA[textSize]]></key>
+<value>14</value>
+</property>
+<property type='b'>
+<key><![CDATA[visible]]></key>
+<value>1</value>
+</property>
+</properties>
+<values>
+<value>
+<key><![CDATA[text]]></key>
+<locked>0</locked>
+<lockedDefaultCurrent>1</lockedDefaultCurrent>
+<default><![CDATA[]]></default>
 <defaultPull>0</defaultPull>
 </value>
 <value>

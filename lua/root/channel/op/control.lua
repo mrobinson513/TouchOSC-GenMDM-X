@@ -1,7 +1,9 @@
 SCALE = 127
 
 function onReceiveNotify(key, value)
-    CC_NUM = value['TL'][key]
+    CC_NUM = value[self.name][key]
+    self.tag = CC_NUM --only logical way to save the value for future use
+    print(CC_NUM, self.tag)
 end
 
 function onValueChanged(key)

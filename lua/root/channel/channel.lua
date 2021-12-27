@@ -1,9 +1,5 @@
 SCALE = 127
-
-function onReceiveNotify(key, value)
-    CC_NUM = value[self.name][key]
-    self.tag = CC_NUM --only logical way to save the value for future use
-end
+CC_NUM = tonumber(self.tag) --get from object tag
 
 function onValueChanged(key)
     if key == 'x' then

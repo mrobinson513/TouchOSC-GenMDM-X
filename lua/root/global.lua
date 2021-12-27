@@ -1,8 +1,5 @@
 SCALE = 127
-
-function onReceiveNotify(key, value)
-    CC_NUM = value['1DR'][key]
-end
+CC_NUM = self.tag --get from object tag
 
 function onValueChanged(key)
     if key == 'x' then
