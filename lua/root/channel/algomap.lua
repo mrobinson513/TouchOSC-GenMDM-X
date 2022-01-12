@@ -11,3 +11,14 @@
 -- Algorithm 6: Op1=R:0.25, Op2=R:0.5, Op3=G:1, Op4=B:1
 -- Algorithm 7: Just make them all R:1,G:1,B:1
 
+MAP[0] = {"C1", "C2", "C3", "C4"}
+MAP[1] = {"C1", "D1", "C3", "C4"}
+MAP[2] = {"C1", "C2", "C3", "C4"}
+MAP[3] = {"C1", "D1", "C3", "C4"}
+MAP[4] = {"C1", "C2", "C3", "C4"}
+MAP[5] = {"C1", "D1", "C3", "C4"}
+MAP[6] = {"C1", "D1", "C3", "C4"}
+MAP[7] = {"C1", "C2", "C3", "C4"}
+
+function onReceiveNotify(key, value)
+    print(MAP[value])
