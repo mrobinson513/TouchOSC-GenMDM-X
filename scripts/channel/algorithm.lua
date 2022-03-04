@@ -1,31 +1,30 @@
--- colour coding
--- each "path" to the output represents a colour
--- each operator represents 25% of the possible total value of the path colour.
--- examples:
--- ALG0 has a single path through each operator, therefore OP4 will be 100% Red
---
--- ALG1 has 2 paths to OP4. Op1 is 25% red, Op2 %25 blue. The path converges at OP3, 
--- so Op3 is 25% Red AND 25% Blue (so, purple). Op4 will add another 25% of each colour
---
--- ALG5's path splits from OP1 parallel into Op2,3 and 4. Colours consist of 25% of each Op1 and 2,
--- then 25% of Op1 and Op3, then 25% of Op1 and Op4
---
--- This is probably insanity, as once we get to ALG7 there are 4 parallel paths to output, thus 4 unique
--- colours. Yet, there are only 3 args to fill for colour (R,G,B)
+function update()
+    boxes = self.children
+    algo_num = tonumber(self.tag) + 1
 
-boxes = self.children
-algo = root.children["ALGO"]
-print(algo.values.x + 1)
+    algo_map = {}
 
-algo_map_enable = {}
-algo_map_label = {}
-algo_map_colour = {}
+    algo_map[1] = {"C1","C2","C3","C4"} --ALG0
+    algo_map[2] = {"B2","D2","C3","C4"} --ALG1
+    algo_map[3] = {"B3","C2","C3","C4"} --ALG2
+    algo_map[4] = {"C2","C3","D3","C4"} --ALG3
+    algo_map[5] = {"C2","C3","D2","D3"} --ALG4
+    algo_map[6] = {"C2","B3","C3","D3"} --ALG5
+    algo_map[7] = {"B2","B3","C3","D3"} --ALG6
+    algo_map[8] = {"D1","D2","D3","D4"} --ALG7
 
-algo_map[1] = {"C1","C2","C3","C4"}
-algo_map[2] = {"B2","D2","C3","C4"}
-algo_map[3] = {"B3","C2","C3","C4"}
-algo_map[4] = {"C2","C3","D3","C4"}
-algo_map[5] = {}
-algo_map[6] = {}
-algo_map[7] = {}
-algo_map[8] = {}
+    for j=1,#algo_map[algo_num] do
+        print(algo_map[algo_num][j])
+        for i=1,#boxes do
+            if boxes[i].name == algo_map[algo_num][j] then
+                print(
+                    "Algorithm", self.tag,
+                    "Active Label:", boxes[i].name
+                )
+                boxes[i].color = Color(1.0, 1.0, 1.0)
+            end
+        end
+    end
+end
+
+-- this works, but need a way to "reset" inactive labels.
