@@ -1,3 +1,14 @@
+if self:getValueProperty("x") == ValueType.FLOAT then
+    v_mult = 128
+    v_midi = math.ceil(self.values.x * v_mult)
+else if self:getValueProperty("x") == ValueType.INTEGER then
+    v_mult = 128 / self.properties.steps
+    v_midi = math.ceil(self.values.x * v_mult)
+else if self:getValueProperty("x") == ValueType.BOOLEAN then
+    v_midi = tonumber(self.values.x)
+end
+
+
 function onReceiveNotify(key, value)
     print(key)
     if key == "cc" then
@@ -9,13 +20,13 @@ function onReceiveNotify(key, value)
             {
                 MIDIMessageType.CONTROLCHANGE,
                 self.tag,
-                math.ceil(self.values.x * 127)
+                v_midi
             }
         )
         print("Reloading for: ",
             "Control: ", self.name,
             "CC: ", self.tag,
-            "Raw value:", math.ceil(self.values.x * 127)
+            "CC value:", v_midi
         )
     end
 end
