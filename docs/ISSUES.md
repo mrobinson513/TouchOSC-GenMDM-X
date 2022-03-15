@@ -15,7 +15,7 @@ While the chip is technically 6 voices, GenMDM splits each voice into its own ch
 It's not yet clear if presets are actually saved. `GENMDM_103.txt#L60` implies that presets are saved to RAM, which typically means anything in RAM is lost after a power cycle.
 
 ## Output quality
-Many Genesis / Megadrive models available for sale these days, either Model1 or Model2, have the unfortunate luck of having inferior sound circuitry. The chip usage itself doesn't appear to be the issue, instead 
+Many Genesis / Megadrive models available for sale these days, either Model1 or Model2, have the unfortunate luck of having inferior sound circuitry. The chip usage itself doesn't appear to be the issue, instead relates to the amplification circuitry. Some mods have been published to improve the amp quality, but requires some careful soldering.
 
 # Out of scope controls
 
