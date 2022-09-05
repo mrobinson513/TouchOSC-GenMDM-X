@@ -15,12 +15,17 @@ OPERATOR_CC["AM"] = {70,71,72,73} -- Amp Mod Enable
 OPERATOR_CC["SSG"] = {90,91,92,93} -- SSG-EG envelope pattern
 
 function init()
+    CH_NUM = 1
     for i=1, #CONTROLS do
+        if CONTROLS[i].name == "channel_select" then
+            CH_NUM = tonumber(CONTROLS[i].values.x+1)
+        end
         if CONTROLS[i].type ~= ControlType.LABEL then
             ctrl = CONTROLS[i]
             CC_NUM = OPERATOR_CC[ctrl.name][OP_NUM]
             -- operator:notify("cc", OPERATOR_CC[name])
             print(
+                "Channel:", CH_NUM,
                 "Operator:", OP_NUM,
                 "Control:", ctrl.name,
                 "CC:", CC_NUM
@@ -31,12 +36,13 @@ function init()
 end
 
 function onReceiveNotify(key)
-    if key == "reload"
+    if key == "reload" then
         for i=1, #CONTROLS do
             ctrl = CONTROLS[i]
             ctrl:notify("reload")
         end
     end
+    if key == "channel" then
+        for i=1, #CONTROLS do
+            ctrl = CONTROLS[i]  
 end
-
-    
