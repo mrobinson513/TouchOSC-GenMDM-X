@@ -15,18 +15,8 @@ function onReceiveNotify(key, value)
         CC_NUM = value
         self.tag = CC_NUM --only logical way to save the value for future use
         print(self.name, self.tag)
-    elseif key == "reload" then
-        sendMIDI(
-            {
-                MIDIMessageType.CONTROLCHANGE,
-                self.tag,
-                v_midi
-            }
-        )
-        print("Reloading for: ",
-            "Control: ", self.name,
-            "CC: ", self.tag,
-            "CC value:", v_midi
-        )
+    elseif(key == "midi_ch") then
+        MIDI_CH = value
+        self.name = MIDI_CH
     end
 end
